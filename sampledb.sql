@@ -1,0 +1,142 @@
+-- Create Database
+CREATE DATABASE UserBankData;
+GO
+
+-- Use the created database
+USE UserBankData;
+GO
+
+-- Create Users Table
+CREATE TABLE users (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    firstname NVARCHAR(50),
+    lastname NVARCHAR(50),
+    email NVARCHAR(100),
+    birthdate DATE
+);
+GO
+
+-- Create Addresses Table
+CREATE TABLE addresses (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    user_id INT,
+    street_address NVARCHAR(255),
+    city NVARCHAR(50),
+    state NVARCHAR(50),
+    postal_code NVARCHAR(20),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+GO
+
+-- Create Telephones Table
+CREATE TABLE telephones (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    user_id INT,
+    phone_number NVARCHAR(20),
+    type NVARCHAR(20),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+GO
+
+-- Create Institutions Table (Banks)
+CREATE TABLE institutions (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    name NVARCHAR(100),
+    city NVARCHAR(50),
+    state NVARCHAR(50),
+    domain NVARCHAR(100)
+);
+GO
+
+-- Create User-Institution Relationship Table
+CREATE TABLE user_institutions (
+    user_id INT,
+    institution_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (institution_id) REFERENCES institutions(id),
+    PRIMARY KEY (user_id, institution_id)
+);
+GO
+
+-- Insert Data into Institutions (Banks)
+INSERT INTO institutions (name, city, state, domain) VALUES 
+(N'Springfield National Bank', N'Springfield', N'IL', N'springfieldbank.example'),
+(N'Chicago Central Bank', N'Chicago', N'IL', N'chicagocentralbank.example'),
+(N'Illinois State Bank', N'Normal', N'IL', N'ilstatebank.example');
+GO
+
+-- Insert Data into Users Table (with invalid emails)
+INSERT INTO users (firstname, lastname, email, birthdate) VALUES
+(N'John', N'Doe', N'john.doe@springfieldbank.example', '1980-05-15'),
+(N'Jane', N'Smith', N'jane.smith@chicagocentralbank.example', '1990-07-22'),
+(N'Alice', N'Johnson', N'alice.johnson@springfieldbank.example', '1985-02-10'),
+(N'Bob', N'Brown', N'bob.brown@springfieldbank.example', '1995-11-01'),
+(N'Charlie', N'Davis', N'charlie.davis@chicagocentralbank.example', '1988-09-30'),
+(N'David', N'Martin', N'david.martin@ilstatebank.example', '1992-04-18'),
+(N'Eve', N'Wilson', N'eve.wilson@springfieldbank.example', '1987-12-07'),
+(N'Frank', N'Lee', N'frank.lee@ilstatebank.example', '1991-01-25'),
+(N'Grace', N'Young', N'grace.young@chicagocentralbank.example', '1983-08-12'),
+(N'Hannah', N'Walker', N'hannah.walker@springfieldbank.example', '1994-10-09'),
+(N'Ian', N'Allen', N'ian.allen@chicagocentralbank.example', '1986-02-14'),
+(N'Jack', N'Hernandez', N'jack.hernandez@ilstatebank.example', '1993-06-30'),
+(N'Kathy', N'Lopez', N'kathy.lopez@chicagocentralbank.example', '1990-12-01'),
+(N'Larry', N'Gonzalez', N'larry.gonzalez@springfieldbank.example', '1989-05-17'),
+(N'Mike', N'Perez', N'mike.perez@springfieldbank.example', '1991-08-03');
+GO
+
+-- Insert Data into Addresses Table
+INSERT INTO addresses (user_id, street_address, city, state, postal_code) VALUES
+(1, N'123 Main St', N'Springfield', N'IL', N'62701'),
+(2, N'456 Oak St', N'Chicago', N'IL', N'60601'),
+(3, N'789 Pine St', N'Springfield', N'IL', N'62702'),
+(4, N'101 Maple St', N'Springfield', N'IL', N'62703'),
+(5, N'202 Birch St', N'Chicago', N'IL', N'60602'),
+(6, N'303 Cedar St', N'Normal', N'IL', N'61761'),
+(7, N'404 Elm St', N'Springfield', N'IL', N'62704'),
+(8, N'505 Redwood St', N'Normal', N'IL', N'61762'),
+(9, N'606 Cedar St', N'Chicago', N'IL', N'60603'),
+(10, N'707 Pine St', N'Springfield', N'IL', N'62705'),
+(11, N'808 Maple St', N'Chicago', N'IL', N'60604'),
+(12, N'909 Birch St', N'Normal', N'IL', N'61763'),
+(13, N'1010 Oak St', N'Chicago', N'IL', N'60605'),
+(14, N'1111 Elm St', N'Springfield', N'IL', N'62706'),
+(15, N'1212 Redwood St', N'Springfield', N'IL', N'62707');
+GO
+
+-- Insert Data into Telephones Table
+INSERT INTO telephones (user_id, phone_number, type) VALUES
+(1, N'555-123-4567', N'mobile'),
+(2, N'555-234-5678', N'home'),
+(3, N'555-345-6789', N'work'),
+(4, N'555-456-7890', N'mobile'),
+(5, N'555-567-8901', N'home'),
+(6, N'555-678-9012', N'work'),
+(7, N'555-789-0123', N'mobile'),
+(8, N'555-890-1234', N'home'),
+(9, N'555-901-2345', N'work'),
+(10, N'555-012-3456', N'mobile'),
+(11, N'555-123-4567', N'home'),
+(12, N'555-234-5678', N'work'),
+(13, N'555-345-6789', N'mobile'),
+(14, N'555-456-7890', N'work'),
+(15, N'555-567-8901', N'mobile');
+GO
+
+-- Insert Data into User-Institution Relationship Table
+INSERT INTO user_institutions (user_id, institution_id) VALUES
+(1, 1), (1, 2),
+(2, 2),
+(3, 1), (3, 3),
+(4, 1),
+(5, 2),
+(6, 3),
+(7, 1),
+(8, 3),
+(9, 2),
+(10, 1),
+(11, 2),
+(12, 3);
+GO
+
+-- Finish creating and inserting data into the database
+PRINT 'Database and tables created, and data inserted successfully!';
